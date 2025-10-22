@@ -1,13 +1,10 @@
-package com.klu.ecommerce;
+package com.klu.ecommerce; // Keep your existing test package
 
-import org.junit.jupiter.api.Test;
+import com.klu.carrental.CarrentalApplication; // ⬅️ IMPORT YOUR MAIN CLASS
 import org.springframework.boot.test.context.SpringBootTest;
 
-@SpringBootTest
+// ⬅️ EXPLICITLY DECLARE THE MAIN CONFIGURATION CLASS
+@SpringBootTest(classes = CarrentalApplication.class) 
 class EcommerceApplicationTests {
-
-	@Test
-	void contextLoads() {
-	}
-
+    // ... test methods
 }

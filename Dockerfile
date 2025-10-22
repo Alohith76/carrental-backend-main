@@ -1,20 +1,14 @@
-# ---------- Build stage ----------
-FROM maven:3.9-eclipse-temurin-21 AS build
+# Use OpenJDK 17 as the base image
+FROM openjdk:17-jdk-slim
+
+# Set working directory
 WORKDIR /app
 
-COPY pom.xml .
-# Cache deps to speed up rebuilds
-RUN --mount=type=cache,target=/root/.m2 mvn -B -DskipTests dependency:go-offline
+# Copy the jar file from the target folder into the container
+COPY target/*.jar app.jar
 
-COPY src ./src
-RUN --mount=type=cache,target=/root/.m2 mvn -B -DskipTests clean install package
+# Expose port 8080 for backend
+EXPOSE 8080
 
-# ---------- Run stage ----------
-FROM eclipse-temurin:21-jre-alpine
-WORKDIR /app
-
-COPY --from=build /app/target/*.jar app.jar
-
-ENV JAVA_OPTS=""
-EXPOSE 8081
-ENTRYPOINT ["sh","-c","java $JAVA_OPTS -jar app.jar"]
+# Run the Spring Boot application
+ENTRYPOINT ["java", "-jar", "app.jar"]
